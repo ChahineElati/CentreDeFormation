@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu, Image, Header, Sticky, Container, Flag } from 'semantic-ui-react'
+import { Menu, Image, Header, Sticky, Container, Flag, Button } from 'semantic-ui-react'
 
 export default class Commun extends Component {
     state = {}
@@ -20,7 +20,7 @@ export default class Commun extends Component {
                             <Menu fixed='top'
                                 borderless
                                 style={{
-                                    backgroundColor: 'rgba(17, 95, 249, 0.8)',
+                                    backgroundColor: 'rgba(17, 95, 249, 0.8)'
                                 }}
                                 color='yellow'
                             >
@@ -49,6 +49,7 @@ export default class Commun extends Component {
                                 <Menu.Item position='right'>
                                     <Menu style={{
                                         backgroundColor: '#115ff9',
+                                        marginRight: 25,
                                     }}
                                     >
 
@@ -90,7 +91,14 @@ export default class Commun extends Component {
                                         >
                                             Formations
                                         </Menu.Item>
+
                                     </Menu>
+                                    <div>
+                                    <Button inverted color='yellow' style={{
+                                        marginRight: 10
+                                    }}>LOG IN</Button>
+                                    <Button inverted color='yellow'>SIGN UP</Button>
+                                    </div>
                                 </Menu.Item>
                             </Menu>
                         </Sticky>
