@@ -14,6 +14,7 @@ export default class Commun extends Component {
             <div className='body'>
                 
                 <div className='content-container'>
+                    {/*Header Section*/}
                     <header>
                         <Sticky>
                             <Menu fixed='top'
