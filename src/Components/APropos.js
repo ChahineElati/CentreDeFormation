@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
-import { Container, Image } from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react'
 
-export default class Home extends Component {
+export default class APropos extends Component {
     render() {
         return (
             <div>
-
-                <Container className="cnt" textAlign="center">
-                    <Image size="medium" centered src="images/logo.png" />
-                    <p style={{
+                <Container textAlign='center'>
+                <p style={{
                         color: "white",
                         fontSize: 30,
                         paddingBottom: 20,
@@ -16,14 +14,16 @@ export default class Home extends Component {
                         borderRadius: 5,
                         fontWeight: 900,
                         margin: 30,
+                        paddingLeft: 50,
+                        paddingTop: 25,
                         position: 'absolute',
                         left: 0,
                         right: 0,
                         }}>
-                    Bienvenue dans notre platforme! Inscrivez vous pour consulter les formations que nous offrons pour vous
-                </p>
-            </Container>
-            </div >
+                            Notre platforme offre diverses formations dans laquelles vous pouvez  inscrire. Nous assurons une bonne qualité. N'hésitez pas à nous réjoindre! 
+                            </p>
+                </Container>
+            </div>
         )
     }
 }

@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { Menu, Image, Header, Sticky, Container, Flag, Button, Modal, Form } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import Main from './Components/Main';
+import { Link } from 'react-router-dom';
 
 export default class App extends Component {
-    state = {}
+    etat = false
+    state = { loggedIn: this.etat }
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name, loggedIn: this.etat })
 
     render() {
         const { activeItem } = this.state
@@ -53,32 +55,34 @@ export default class App extends Component {
                                 }}
                                 >
 
-                                    <Menu.Item
-                                        name='home'
-                                        active={activeItem === 'home'}
-                                        onClick={this.handleItemClick}
-                                        style={{
-                                            fontFamily: 'Arial, sans-serif',
-                                            color: 'white',
-                                            fontWeight: 700
-                                        }}
-                                    >
-                                        Home
-                                    </Menu.Item>
-
-                                    <Menu.Item
-                                        name='a-propos'
-                                        active={activeItem === 'a-propos'}
-                                        onClick={this.handleItemClick}
-                                        style={{
-                                            fontFamily: 'Arial, sans-serif',
-                                            color: 'white',
-                                            fontWeight: 700
-                                        }}
-                                    >
-                                        A propos
-                                    </Menu.Item>
-
+                                    <Link to='/'>
+                                        <Menu.Item
+                                            name='home'
+                                            active={activeItem === 'home'}
+                                            onClick={this.handleItemClick}
+                                            style={{
+                                                fontFamily: 'Arial, sans-serif',
+                                                color: 'white',
+                                                fontWeight: 700
+                                            }}
+                                        >
+                                            Home
+                                        </Menu.Item>
+                                    </Link>
+                                    <Link to='/APropos'>
+                                        <Menu.Item
+                                            name='a-propos'
+                                            active={activeItem === 'a-propos'}
+                                            onClick={this.handleItemClick}
+                                            style={{
+                                                fontFamily: 'Arial, sans-serif',
+                                                color: 'white',
+                                                fontWeight: 700
+                                            }}
+                                        >
+                                            A propos
+                                        </Menu.Item>
+                                    </Link>
                                     <Menu.Item
                                         name='formations'
                                         active={activeItem === 'formations'}
@@ -115,7 +119,7 @@ export default class App extends Component {
                                                     <input type='password' placeholder='Mot de passe' />
                                                 </Form.Field>
                                                 <Button inverted color='blue' type='submit' style={{
-                                                    position:'relative',
+                                                    position: 'relative',
                                                     left: '42%'
                                                 }}>Log In</Button>
                                             </Form>
@@ -148,13 +152,13 @@ export default class App extends Component {
                                                     <input type='password' placeholder='Mot de passe' />
                                                 </Form.Field>
                                                 <Button inverted color='blue' type='submit' style={{
-                                                    position:'relative',
+                                                    position: 'relative',
                                                     left: '40%'
                                                 }}>Sign Up</Button>
                                             </Form>
                                         </Modal.Content>
                                     </Modal>
-                                    
+
                                 </div>
                             </Menu.Item>
                         </Menu>
