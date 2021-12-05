@@ -95,6 +95,21 @@ export default class App extends Component {
                                     >
                                         Formations
                                     </Menu.Item>
+                                    
+                                    <Link to='/Admin'>
+                                        <Menu.Item
+                                            name='/Admin'
+                                            active={activeItem === 'Admin'}
+                                            onClick={this.handleItemClick}
+                                            style={{
+                                                fontFamily: 'Arial, sans-serif',
+                                                color: 'white',
+                                                fontWeight: 700
+                                            }}
+                                        >
+                                            Admin
+                                        </Menu.Item>
+                                    </Link>
 
                                 </Menu>
                                 <div>
