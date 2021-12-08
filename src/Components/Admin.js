@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu,Input, Segment } from 'semantic-ui-react'
+import { Menu,Input, Segment ,Label } from 'semantic-ui-react'
 import { Form } from 'semantic-ui-react'
 
 
@@ -38,10 +38,21 @@ export default class Admin extends Component {
           />
         </Form.Group>
         <Form.Group inline>
-          <label>date</label>
-          
+          <label>nmbre de place </label>
+          <Input placeholder='nmbre de condidat...' />
+          <label>nmbre de place max</label>
+          <Input placeholder='nmbre de condidat maximum...' />
+          <label>prix</label>
+          <Input placeholder='prix du foramtion...' />
+
           
         </Form.Group>
+       <Form.Group inline>
+       <label>categorie </label>
+          <Input placeholder='categorie...' />
+
+       </Form.Group>
+        
         <Form.TextArea label='About' placeholder='description du formation...' />
         
         <Form.Button>Submit</Form.Button>
