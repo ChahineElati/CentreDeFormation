@@ -38,12 +38,13 @@ export default class Admin extends Component {
           />
         </Form.Group>
         <Form.Group inline>
-          <label>nmbre de place </label>
-          <Input placeholder='nmbre de condidat...' />
           <label>nmbre de place max</label>
           <Input placeholder='nmbre de condidat maximum...' />
           <label>prix</label>
           <Input placeholder='prix du foramtion...' />
+          <label>date de debut </label>
+          <Input type="date" placeholder='date ...' />
+
 
           
         </Form.Group>
