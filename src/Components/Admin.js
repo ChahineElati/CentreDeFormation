@@ -5,9 +5,8 @@ import { Form } from 'semantic-ui-react'
 
 
    const options = [
-  { key: '1', text: 'type1', value: 'type1' },
-  { key: '2', text: 'type2', value: 'type2' },
-  { key: '3', text: 'type3', value: 'type3' },
+  { key: '1', text: 'en ligne ', value: 'en ligne ' },
+  { key: '2', text: 'presentiel ', value: 'presentiel' },
 ]  
 
 export default class Admin extends Component {
