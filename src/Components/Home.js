@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Container, Image } from 'semantic-ui-react'
+import Formation from './Entities/Formation'
 
 export default class Home extends Component {
     render() {
         return (
             <div>
-
+                <Formation></Formation>
                 <Container className="cnt" textAlign="center">
                     <Image size="medium" centered src="images/logo.png" />
                     <p style={{

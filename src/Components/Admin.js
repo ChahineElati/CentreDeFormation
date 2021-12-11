@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Menu,Input, Segment ,Label } from 'semantic-ui-react'
+import { Menu,Input, Segment } from 'semantic-ui-react'
 import { Form } from 'semantic-ui-react'
-
+import axios from 'axios'
 
 
    const options = [
@@ -12,52 +12,69 @@ import { Form } from 'semantic-ui-react'
 export default class Admin extends Component {
 
 
-  state = { }
+  constructor(props){
+    super(props);
+    this.state = { }
+  }
 
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-    handleChange = (e, { value }) => this.setState({ value });
+    handleChange = (e) => this.setState({ 
+      titre: e.target.titre.value
+    });
 
+    handleSubmit = event => {
+      event.preventDefault();
+      const formation = {
+        dateDebut: null,
+        titre: event.target.titre.value,
+        duree: event.target.duree.value,
+        type: "non terminé",
+        prix: event.target.prix.value,
+        nbrCandidatMax: event.target.nbr_cand_max.value,
+        categorie: event.target.categorie.value,
+        description: event.target.description.value
+      }
+
+      axios.post("http://localhost:8080/api/formations/", formation).then(response =>{
+        console.log(response.data)
+      })
+      
+    }
 
     render() {
       const { activeItem } = this.state
-      const { value } = this.state
       var jsx;
       if (activeItem ==='ajouter une formation ') {
-        jsx =<Segment attached='bottom'><p>formulaire</p>
-              <Form>
+        jsx =<Segment attached='bottom'><p>Ajouter une formation:</p>
+              <Form onSubmit={this.handleSubmit}>
         <Form.Group widths='equal'>
-          <Form.Input fluid label='titre de formation' placeholder='titre de formation' />
-          <Form.Input fluid label='nom de formateur' placeholder='nom de formateur ' />
+          <Form.Input fluid label='Titre de formation' name='titre' placeholder='Titre de formation' />
+          <Form.Input fluid label='Nom de formateur' name='nom_formateur' placeholder='Nom de formateur ' />
           <Form.Select
             fluid
             label='type de formation'
             options={options}
             placeholder='type de formation'
+            name='type_formation'
           />
         </Form.Group>
-        <Form.Group inline>
-          <label>nmbre de place max</label>
-          <Input placeholder='nmbre de condidat maximum...' />
-          <label>prix</label>
-          <Input placeholder='prix du foramtion...' />
-          <label>date de debut </label>
-          <Input type="date" placeholder='date ...' />
-
-
-          
+        <Form.Group widths='equal'>
+          <Form.Input fluid label='Nombre de place max' name='nbr_cand_max' placeholder='Nombre de condidat maximum...' />
+          <Form.Input fluid label='Prix' name='prix' placeholder='Prix du foramtion...' />
+          <Form.Input fluid label='Date de debut' name='date_debut' type="date" placeholder='Date ...' />
+          <Form.Input fluid label='Durée' name='duree' type="number" placeholder='Durée (En jours)' /> 
         </Form.Group>
        <Form.Group inline>
-       <label>categorie </label>
-          <Input placeholder='categorie...' />
+       <label>Categorie </label>
+          <Input placeholder='Categorie...' name='categorie'/>
 
        </Form.Group>
         
-        <Form.TextArea label='About' placeholder='description du formation...' />
+        <Form.TextArea label='About' placeholder='Description du formation...' name='description' />
         
         <Form.Button>Submit</Form.Button>
       </Form>
-
 
 
         </Segment>;
