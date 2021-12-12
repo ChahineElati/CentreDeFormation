@@ -1,45 +1,61 @@
-import React, { Component } from 'react'
-import { Menu,Input, Segment } from 'semantic-ui-react'
-import { Form } from 'semantic-ui-react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import { Menu, Segment } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
+import axios from 'axios';
+import ListFormations from './ListFormations';
 
 
    const options = [
   { key: '1', text: 'en ligne ', value: 'en ligne ' },
   { key: '2', text: 'presentiel ', value: 'presentiel' },
-]  
+];
+  const etat = ['non terminée', 'terminée']  
 
 export default class Admin extends Component {
 
 
   constructor(props){
     super(props);
-    this.state = { }
+    this.state = { selectValue: ''}
   }
 
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-    handleChange = (e) => this.setState({ 
-      titre: e.target.titre.value
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name, selectValue: ''});
+    handleChange = (e, {value}) => this.setState({ 
+      selectValue: value
     });
+
+    init(event){
+      event.target.date_debut.value = null;
+        event.target.titre.value = "";
+        event.target.duree.value = null;
+        this.setState({selectValue: ''});
+        event.target.prix.value = null;
+        event.target.nb_cand_max.value = null;
+        event.target.categorie.value = "";
+        event.target.description.value = "";
+    }
 
     handleSubmit = event => {
       event.preventDefault();
       const formation = {
-        dateDebut: null,
+        dateDebut: event.target.date_debut.value,
         titre: event.target.titre.value,
         duree: event.target.duree.value,
-        type: "non terminé",
+        type: this.state.selectValue,
         prix: event.target.prix.value,
-        nbrCandidatMax: event.target.nbr_cand_max.value,
+        nbrCondidatMax: event.target.nb_cand_max.value,
         categorie: event.target.categorie.value,
-        description: event.target.description.value
+        description: event.target.description.value,
+        etat: etat[0],
       }
 
       axios.post("http://localhost:8080/api/formations/", formation).then(response =>{
         console.log(response.data)
-      })
-      
+      });
+
+      alert("Formation ajoutée.");
+      this.init(event);
     }
 
     render() {
@@ -49,47 +65,60 @@ export default class Admin extends Component {
         jsx =<Segment attached='bottom'><p>Ajouter une formation:</p>
               <Form onSubmit={this.handleSubmit}>
         <Form.Group widths='equal'>
-          <Form.Input fluid label='Titre de formation' name='titre' placeholder='Titre de formation' />
-          <Form.Input fluid label='Nom de formateur' name='nom_formateur' placeholder='Nom de formateur ' />
+          <Form.Input fluid label='Titre de formation' name='titre' placeholder='Titre de formation' required={"required"}/>
+          <Form.Input fluid label='Nom de formateur' name='nom_formateur' placeholder='Nom de formateur '/>
           <Form.Select
             fluid
             label='type de formation'
             options={options}
-            placeholder='type de formation'
-            name='type_formation'
+            placeholder='Type de formation'
+            name='type'
+            value={this.state.selectValue}
+            onChange={this.handleChange}
+            required={"required"}
           />
         </Form.Group>
         <Form.Group widths='equal'>
-          <Form.Input fluid label='Nombre de place max' name='nbr_cand_max' placeholder='Nombre de condidat maximum...' />
-          <Form.Input fluid label='Prix' name='prix' placeholder='Prix du foramtion...' />
-          <Form.Input fluid label='Date de debut' name='date_debut' type="date" placeholder='Date ...' />
-          <Form.Input fluid label='Durée' name='duree' type="number" placeholder='Durée (En jours)' /> 
+          <Form.Input label='Nombre de place max' name='nb_cand_max' type='number' placeholder='Nombre de condidat maximum...' required={"required"}/>
+          <Form.Input label='Prix' name='prix' placeholder='Prix du foramtion...' required={"required"}/>
+          <Form.Input label='Date de debut' name='date_debut' type="date" placeholder='Date ...' required={"required"}/>
+          <Form.Input label='Durée' name='duree' type="number" placeholder='Durée (En jours)' required={"required"}/> 
         </Form.Group>
-       <Form.Group inline>
-       <label>Categorie </label>
-          <Input placeholder='Categorie...' name='categorie'/>
+       <Form.Group>
+          <Form.Input label="Catégorie" placeholder='Catégorie...' name='categorie' required={"required"}/>
 
        </Form.Group>
         
-        <Form.TextArea label='About' placeholder='Description du formation...' name='description' />
+        <Form.TextArea label='About' placeholder='Description du formation...' name='description' required={"required"}/>
         
-        <Form.Button>Submit</Form.Button>
+        <Form.Button inverted color='blue' size='large'>Ajouter</Form.Button>
       </Form>
 
 
+        </Segment>;
+      } else if(activeItem === 'liste de formations') {
+        jsx = <Segment attached='bottom'>
+          <ListFormations></ListFormations>
         </Segment>;
       }
       return (
         <div>
         <Menu attached='top' tabular>
           <Menu.Item
-            name='liste de formation'
-            active={activeItem === 'liste de formation'}
+            style={{
+              backgroundColor: 'white'
+            }}
+            name='liste de formations'
+            active={activeItem === 'liste de formations'}
             onClick={this.handleItemClick}
+            selected
            />
         
         
           <Menu.Item
+          style={{
+            backgroundColor: 'white'
+          }}
             name='ajouter une formation '
             active={activeItem === 'ajouter une formation '}
             onClick={this.handleItemClick}
