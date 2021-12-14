@@ -25,7 +25,7 @@ export default class Admin extends Component {
       selectValue: value
     });
 
-    init(event){
+    initForm(event){
       event.target.date_debut.value = null;
         event.target.titre.value = "";
         event.target.duree.value = null;
@@ -48,14 +48,14 @@ export default class Admin extends Component {
         categorie: event.target.categorie.value,
         description: event.target.description.value,
         etat: etat[0],
+        nomFormateur: event.target.nom_formateur.value,
       }
 
-      axios.post("http://localhost:8080/api/formations/", formation).then(response =>{
-        console.log(response.data)
+      axios.post("http://localhost:8080/api/formations/", formation).then(() =>{
       });
 
       alert("Formation ajoutée.");
-      this.init(event);
+      this.initForm(event);
     }
 
     render() {
@@ -66,7 +66,7 @@ export default class Admin extends Component {
               <Form onSubmit={this.handleSubmit}>
         <Form.Group widths='equal'>
           <Form.Input fluid label='Titre de formation' name='titre' placeholder='Titre de formation' required={"required"}/>
-          <Form.Input fluid label='Nom de formateur' name='nom_formateur' placeholder='Nom de formateur '/>
+          <Form.Input fluid label='Nom de formateur' name='nom_formateur' placeholder='Nom de formateur ' required={"required"}/>
           <Form.Select
             fluid
             label='type de formation'
@@ -80,7 +80,7 @@ export default class Admin extends Component {
         </Form.Group>
         <Form.Group widths='equal'>
           <Form.Input label='Nombre de place max' name='nb_cand_max' type='number' placeholder='Nombre de condidat maximum...' required={"required"}/>
-          <Form.Input label='Prix' name='prix' placeholder='Prix du foramtion...' required={"required"}/>
+          <Form.Input label='Prix(Dt)' name='prix' placeholder='Prix du foramtion...' required={"required"}/>
           <Form.Input label='Date de debut' name='date_debut' type="date" placeholder='Date ...' required={"required"}/>
           <Form.Input label='Durée' name='duree' type="number" placeholder='Durée (En jours)' required={"required"}/> 
         </Form.Group>
