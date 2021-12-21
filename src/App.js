@@ -3,16 +3,183 @@ import { Menu, Image, Header, Sticky, Container, Flag, Button, Modal, Form } fro
 import 'semantic-ui-css/semantic.min.css';
 import Main from './Components/Main';
 import { Link } from 'react-router-dom';
+import UtilisateurService from './Components/Services/UtilisateurService';
 
 export default class App extends Component {
-    etat = false
-    state = { loggedIn: this.etat }
+    state = JSON.parse(window.localStorage.getItem('state')) || {
+        role: "not logged in", utilisateur: null
+    }
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name, loggedIn: this.etat })
+    setState(state) {
+        window.localStorage.setItem('state', JSON.stringify(state));
+        super.setState(state);
+    }
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name }
+    )
+
+    signOut = () => {
+        this.setState({role: "not logged in", utilisateur: null})
+    }
+
+    addUtilisateur = e => {
+
+        const utilisateur = {
+            nom: e.target.nom.value,
+            prenom: e.target.prenom.value,
+            email: e.target.email.value,
+            motDePasse: e.target.mdp.value,
+            role: 'utilisateur'
+        }
+
+        UtilisateurService.addUtilisateur(utilisateur).then(() => {
+            alert("Utilisateur créé.");
+        })
+    }
+
+    signIn = e => {
+        UtilisateurService.getUtilisateurByEmail(e.target.email.value, e.target.mdp.value).then(response => {
+            if (typeof (response.data) === "object") {
+                if (response.data.role === "utilisateur") {
+                    this.setState({
+                        role: "utilisateur",
+                        utilisateur: response.data,
+                    });
+                } else {
+                    this.setState({
+                        role: "admin",
+                        utilisateur: response.data,
+                    })
+                }
+            } else {
+                alert("email ou mot de passe incorrect.");
+            }
+        })
+    }
 
     render() {
         const { activeItem } = this.state
+        var menu_item = null;
+        var bar = null
+        if (this.state.role === "admin") {
+            menu_item = <Link to='/Admin'>
+                <Menu.Item
+                    name='Admin'
+                    active={activeItem === 'Admin'}
+                    onClick={this.handleItemClick}
+                    style={{
+                        fontFamily: 'Arial, sans-serif',
+                        color: 'white',
+                        fontWeight: 700
+                    }}
+                >
+                    Admin
+                </Menu.Item>
+            </Link>
+            bar = <div>
+                <h2 style={{
+                    color: "white",
+                    fontWeight: "bold"
+                }}>Bienvenu {this.state.utilisateur.prenom} {this.state.utilisateur.nom}</h2>
+                <Button style={{
+                    float: "right"
+                }}
+                    inverted color='yellow'
+                    onClick={this.signOut}
+                >Sign Out</Button>
+            </div>
 
+        } else if (this.state.role === "utilisateur") {
+            menu_item = <Link to='/Formations'>
+            <Menu.Item
+                name='Formations'
+                active={activeItem === 'Formations'}
+                onClick={this.handleItemClick}
+                style={{
+                    fontFamily: 'Arial, sans-serif',
+                    color: 'white',
+                    fontWeight: 700
+                }}
+            >
+                Formations
+            </Menu.Item>
+        </Link>
+            bar = <div>
+                <h2 style={{
+                    color: "white",
+                    fontWeight: "bold"
+                }}>Bienvenu {this.state.utilisateur.prenom} {this.state.utilisateur.nom}</h2>
+                <Button style={{
+                    float: "right"
+                }}
+                    inverted color='yellow'
+                    onClick={this.signOut}
+                >Sign Out</Button>
+            </div>
+        } else {
+            bar = <div>
+                <Modal size='tiny' style={{
+                    backgroundColor: 'darkred'
+                }}
+                    trigger={<Button inverted color='yellow' style={{
+                        marginRight: 10
+                    }}>LOG IN</Button>}
+                >
+                    <Modal.Header style={{
+                        textAlign: 'center'
+                    }}>LOG IN</Modal.Header>
+                    <Modal.Content>
+                        <Form onSubmit={this.signIn}>
+                            <Form.Field>
+                                <label>Email</label>
+                                <input type='email' placeholder='exemple@Email.com' name='email' />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Mot de passe</label>
+                                <input type='password' placeholder='Mot de passe' name='mdp' />
+                            </Form.Field>
+                            <Button inverted color='blue' type='submit' style={{
+                                position: 'relative',
+                                left: '42%'
+                            }}>Log In</Button>
+                        </Form>
+                    </Modal.Content>
+                </Modal>
+                <Modal size='tiny' style={{
+                    backgroundColor: 'darkred'
+                }}
+                    trigger={<Button inverted color='yellow'>SIGN UP</Button>}
+                >
+                    <Modal.Header style={{
+                        textAlign: 'center'
+                    }}>SIGN UP</Modal.Header>
+                    <Modal.Content>
+                        <Form onSubmit={this.addUtilisateur}>
+                            <Form.Field>
+                                <label>Nom</label>
+                                <input placeholder='Nom' name='nom' />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Prénom</label>
+                                <input placeholder='Prénom' name='prenom' />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Email</label>
+                                <input type='email' placeholder='exemple@email.com' name='email' />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Mot de passe</label>
+                                <input type='password' placeholder='Mot de passe' name='mdp' />
+                            </Form.Field>
+                            <Button inverted color='blue' type='submit' style={{
+                                position: 'relative',
+                                left: '40%'
+                            }}>Sign Up</Button>
+                        </Form>
+                    </Modal.Content>
+                </Modal>
+
+            </div>
+        }
         return (
 
             <div className='App'>
@@ -83,98 +250,11 @@ export default class App extends Component {
                                             A propos
                                         </Menu.Item>
                                     </Link>
-                                    <Menu.Item
-                                        name='formations'
-                                        active={activeItem === 'formations'}
-                                        onClick={this.handleItemClick}
-                                        style={{
-                                            fontFamily: 'Arial, sans-serif',
-                                            color: 'white',
-                                            fontWeight: 700
-                                        }}
-                                    >
-                                        Formations
-                                    </Menu.Item>
-                                    
-                                    <Link to='/Admin'>
-                                        <Menu.Item
-                                            name='/Admin'
-                                            active={activeItem === 'Admin'}
-                                            onClick={this.handleItemClick}
-                                            style={{
-                                                fontFamily: 'Arial, sans-serif',
-                                                color: 'white',
-                                                fontWeight: 700
-                                            }}
-                                        >
-                                            Admin
-                                        </Menu.Item>
-                                    </Link>
+
+                                    {menu_item}
 
                                 </Menu>
-                                <div>
-                                    <Modal size='tiny' style={{
-                                        backgroundColor: 'darkred'
-                                    }}
-                                        trigger={<Button inverted color='yellow' style={{
-                                            marginRight: 10
-                                        }}>LOG IN</Button>}
-                                    >
-                                        <Modal.Header style={{
-                                            textAlign: 'center'
-                                        }}>LOG IN</Modal.Header>
-                                        <Modal.Content>
-                                            <Form>
-                                                <Form.Field>
-                                                    <label>Email</label>
-                                                    <input type='email' placeholder='exemple@Email.com' />
-                                                </Form.Field>
-                                                <Form.Field>
-                                                    <label>Mot de passe</label>
-                                                    <input type='password' placeholder='Mot de passe' />
-                                                </Form.Field>
-                                                <Button inverted color='blue' type='submit' style={{
-                                                    position: 'relative',
-                                                    left: '42%'
-                                                }}>Log In</Button>
-                                            </Form>
-                                        </Modal.Content>
-                                    </Modal>
-                                    <Modal size='tiny' style={{
-                                        backgroundColor: 'darkred'
-                                    }}
-                                        trigger={<Button inverted color='yellow'>SIGN UP</Button>}
-                                    >
-                                        <Modal.Header style={{
-                                            textAlign: 'center'
-                                        }}>SIGN UP</Modal.Header>
-                                        <Modal.Content>
-                                            <Form>
-                                                <Form.Field>
-                                                    <label>Nom</label>
-                                                    <input placeholder='Nom' />
-                                                </Form.Field>
-                                                <Form.Field>
-                                                    <label>Prénom</label>
-                                                    <input placeholder='Prénom' />
-                                                </Form.Field>
-                                                <Form.Field>
-                                                    <label>Email</label>
-                                                    <input type='email' placeholder='exemple@email.com' />
-                                                </Form.Field>
-                                                <Form.Field>
-                                                    <label>Mot de passe</label>
-                                                    <input type='password' placeholder='Mot de passe' />
-                                                </Form.Field>
-                                                <Button inverted color='blue' type='submit' style={{
-                                                    position: 'relative',
-                                                    left: '40%'
-                                                }}>Sign Up</Button>
-                                            </Form>
-                                        </Modal.Content>
-                                    </Modal>
-
-                                </div>
+                                {bar}
                             </Menu.Item>
                         </Menu>
                     </Sticky>

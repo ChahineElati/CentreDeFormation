@@ -12,8 +12,7 @@ import ListFormations from './ListFormations';
   const etat = ['non terminée', 'terminée']  
 
 export default class Admin extends Component {
-
-
+  
   constructor(props){
     super(props);
     this.state = { selectValue: ''}
@@ -34,6 +33,7 @@ export default class Admin extends Component {
         event.target.nb_cand_max.value = null;
         event.target.categorie.value = "";
         event.target.description.value = "";
+        event.target.nom_formateur.value = "";
     }
 
     handleSubmit = event => {

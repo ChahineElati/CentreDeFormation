@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Image } from 'semantic-ui-react';
 
 export default class Home extends Component {
+
     render() {
         return (
             <div>
